@@ -1,0 +1,113 @@
+{
+  "consumer": {
+    "name": "AplicacionReserva"
+  },
+  "interactions": [
+    {
+      "description": "una solicitud para crear una reserva con 0 horas",
+      "providerStates": [
+        {
+          "name": "el sistema está listo para crear una reserva"
+        }
+      ],
+      "request": {
+        "body": {
+          "date": "2026-05-01",
+          "hours": 0,
+          "room": "SALA-1",
+          "userId": "U100"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/reservations"
+      },
+      "response": {
+        "body": {
+          "error": "Los datos de la reserva no son válidos"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "status": {}
+        },
+        "status": 400
+      }
+    },
+    {
+      "description": "una solicitud para crear una reserva válida",
+      "providerStates": [
+        {
+          "name": "el sistema está listo para crear una reserva"
+        }
+      ],
+      "request": {
+        "body": {
+          "date": "2026-05-01",
+          "hours": 2,
+          "room": "SALA-1",
+          "userId": "U100"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/reservations"
+      },
+      "response": {
+        "body": {
+          "date": "2026-05-01",
+          "hours": 2,
+          "id": "R-2001",
+          "room": "SALA-1",
+          "status": "ACTIVA",
+          "userId": "U100"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "status": {}
+        },
+        "status": 201
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "12.5.2"
+    },
+    "pactRust": {
+      "ffi": "0.4.20",
+      "models": "1.2.0"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "ServicioReservas"
+  }
+}

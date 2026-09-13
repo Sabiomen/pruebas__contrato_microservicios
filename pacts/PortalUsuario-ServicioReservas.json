@@ -1,0 +1,125 @@
+{
+  "consumer": {
+    "name": "PortalUsuario"
+  },
+  "interactions": [
+    {
+      "description": "una solicitud de las reservas del usuario U100",
+      "providerStates": [
+        {
+          "name": "el usuario U100 tiene una reserva activa"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/reservations",
+        "query": {
+          "userId": [
+            "U100"
+          ]
+        }
+      },
+      "response": {
+        "body": [
+          {
+            "date": "2026-05-01",
+            "hours": 2,
+            "id": "R-2001",
+            "room": "SALA-1",
+            "status": "ACTIVA",
+            "userId": "U100"
+          }
+        ],
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$[*].date": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].hours": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].room": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "status": {}
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "una solicitud de las reservas del usuario U200",
+      "providerStates": [
+        {
+          "name": "el usuario U200 no tiene reservas"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/reservations",
+        "query": {
+          "userId": [
+            "U200"
+          ]
+        }
+      },
+      "response": {
+        "body": [],
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "12.5.2"
+    },
+    "pactRust": {
+      "ffi": "0.4.20",
+      "models": "1.2.0"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "ServicioReservas"
+  }
+}
