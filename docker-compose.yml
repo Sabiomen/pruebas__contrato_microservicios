@@ -1,0 +1,37 @@
+services:
+  reservation-service:
+    build: ./services/servicio-reservacion
+    container_name: servicio-reservacion
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  user-portal:
+    build: ./services/portal-usuario
+    container_name: portal-usuario
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - RESERVATION_SERVICE_URL=http://servicio-reservacion:3001
+    depends_on:
+      reservation-service:
+        condition: service_healthy
+
+  admin-service:
+    build: ./services/servicio-admin
+    container_name: servicio-admin
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - RESERVATION_SERVICE_URL=http://servicio-reservacion:3001
+    depends_on:
+      reservation-service:
+        condition: service_healthy
